@@ -9,23 +9,39 @@ public class Cube {
     private Shader shader;
     private float[] vertices = {
             // Positions          // Texture Coords
-            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // 0
-            0.5f, -0.5f, -0.5f,  1.0f, 0.0f, // 1
-            0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // 2
-            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // 3
-            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // 4
-            0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // 5
-            0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // 6
-            -0.5f,  0.5f,  0.5f,  0.0f, 1.0f  // 7
+            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // Front face
+            0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // Back face
+            0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+            0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+            -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // Left face
+            -0.5f,  0.5f, -0.5f,  1.0f, 0.0f,
+            -0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f, 1.0f,
+            0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // Right face
+            0.5f,  0.5f, -0.5f,  1.0f, 0.0f,
+            0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+            0.5f, -0.5f,  0.5f,  0.0f, 1.0f,
+            -0.5f,  0.5f, -0.5f,  0.0f, 0.0f, // Top face
+            0.5f,  0.5f, -0.5f,  1.0f, 0.0f,
+            0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+            -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // Bottom face
+            0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+            0.5f, -0.5f,  0.5f,  1.0f, 1.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f, 1.0f
     };
 
     private int[] indices = {
             0, 1, 2, 2, 3, 0,   // Front face
             4, 5, 6, 6, 7, 4,   // Back face
-            4, 5, 1, 1, 0, 4,   // Bottom face
-            6, 7, 3, 3, 2, 6,   // Top face
-            7, 4, 0, 0, 3, 7,   // Left face
-            1, 5, 6, 6, 2, 1    // Right face
+            8, 9, 10, 10, 11, 8, // Left face
+            12, 13, 14, 14, 15, 12, // Right face
+            16, 17, 18, 18, 19, 16, // Top face
+            20, 21, 22, 22, 23, 20  // Bottom face
     };
 
     public Cube(String texturePath, Shader shader) {

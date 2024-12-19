@@ -21,7 +21,6 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     implementation(platform("org.lwjgl:lwjgl-bom:$lwjglVersion"))
-    implementation("org.lwjgl", "lwjgl")
     implementation("org.lwjgl", "lwjgl-assimp")
     implementation("org.lwjgl", "lwjgl-bgfx")
     implementation("org.lwjgl", "lwjgl-cuda")

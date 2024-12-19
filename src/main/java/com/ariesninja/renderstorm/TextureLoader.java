@@ -10,6 +10,7 @@ import static org.lwjgl.opengl.GL45.*;
 import static org.lwjgl.system.MemoryStack.stackPush;
 
 public class TextureLoader {
+
     public static int loadTexture(String filePath) {
         int textureID = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, textureID);
@@ -26,6 +27,7 @@ public class TextureLoader {
             IntBuffer height = stack.mallocInt(1);
             IntBuffer channels = stack.mallocInt(1);
 
+            STBImage.stbi_set_flip_vertically_on_load(true); // Flip image vertically
             ByteBuffer image = STBImage.stbi_load(filePath, width, height, channels, 4);
             if (image == null) {
                 throw new RuntimeException("Failed to load texture: " + STBImage.stbi_failure_reason());
@@ -40,4 +42,5 @@ public class TextureLoader {
 
         return textureID;
     }
+    
 }
