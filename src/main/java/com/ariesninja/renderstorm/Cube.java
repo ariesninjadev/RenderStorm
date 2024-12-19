@@ -9,30 +9,30 @@ public class Cube {
     private Shader shader;
     private float[] vertices = {
             // Positions          // Texture Coords
-            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // Front face
-            0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // Back face
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // Back face
+            0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+            0.5f,  0.5f, -0.5f,  1.0f, 0.0f,
+            -0.5f,  0.5f, -0.5f,  0.0f, 0.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // Front face
             0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
             0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
             -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // Left face
-            -0.5f,  0.5f, -0.5f,  1.0f, 0.0f,
-            -0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f, 1.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // Left face
+            -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+            -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
             0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // Right face
             0.5f,  0.5f, -0.5f,  1.0f, 0.0f,
             0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
             0.5f, -0.5f,  0.5f,  0.0f, 1.0f,
             -0.5f,  0.5f, -0.5f,  0.0f, 0.0f, // Top face
-            0.5f,  0.5f, -0.5f,  1.0f, 0.0f,
+            0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
             0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-            -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // Bottom face
-            0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-            0.5f, -0.5f,  0.5f,  1.0f, 1.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f, 1.0f
+            -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+            -0.5f, -0.5f, -0.5f,  1.0f, 0.0f, // Bottom face
+            0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+            0.5f, -0.5f,  0.5f,  0.0f, 1.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f
     };
 
     private int[] indices = {
@@ -44,8 +44,13 @@ public class Cube {
             20, 21, 22, 22, 23, 20  // Bottom face
     };
 
-    public Cube(String texturePath, Shader shader) {
+    private float coordX, coordY, coordZ;
+
+    public Cube(String texturePath, Shader shader, float coordX, float coordY, float coordZ) {
         this.shader = shader;
+        this.coordX = coordX;
+        this.coordY = coordY;
+        this.coordZ = coordZ;
         textureID = TextureLoader.loadTexture(texturePath);
         initCube();
     }
@@ -77,7 +82,7 @@ public class Cube {
         shader.setMat4("view", camera.getViewMatrix());
         shader.setMat4("projection", camera.getProjectionMatrix());
 
-        Matrix4f model = new Matrix4f().identity();
+        Matrix4f model = new Matrix4f().identity().translate(coordX + 0.5f, coordY + 0.5f, coordZ + 0.5f);
         float[] modelArray = new float[16];
         model.get(modelArray);
         shader.setMat4("model", modelArray);

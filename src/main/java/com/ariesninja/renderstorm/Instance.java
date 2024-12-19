@@ -16,6 +16,7 @@ import static org.lwjgl.system.MemoryStack.*;
 public class Instance {
 
     private long window;
+    private World world;
     private Cube cube;
     private Camera camera;
     private InputHandler inputHandler;
@@ -24,6 +25,10 @@ public class Instance {
 
     private int screenWidth = 2560/2;
     private int screenHeight = 1440/2;
+
+    private long lastTime;
+    private int frames;
+    private float fps;
 
     public void run() throws IOException {
         init();
@@ -53,12 +58,28 @@ public class Instance {
 
         glEnable(GL_DEPTH_TEST);
 
-        // Initialize components
+        // Get the base directory
+        String baseDir = System.getProperty("user.dir");
+
+        // Initialize components with relative paths
         shader = new Shader(
-                "C:\\Users\\aries\\Documents\\Development\\RenderStorm\\src\\main\\resources\\data\\vertex_shader.glsl",
-                "C:\\Users\\aries\\Documents\\Development\\RenderStorm\\src\\main\\resources\\data\\fragment_shader.glsl"
+                baseDir + "/src/main/resources/data/vertex_shader.glsl",
+                baseDir + "/src/main/resources/data/fragment_shader.glsl"
         );
-        cube = new Cube("C:\\Users\\aries\\Documents\\Development\\RenderStorm\\src\\main\\resources\\4krender.png", shader);
+
+        // Initialize the world
+        world = new World();
+
+        cube = new Cube(baseDir + "/src/main/resources/4krender.png", shader, 0.0f, 0.0f, 0.0f);
+        world.addCube(cube);
+
+        // Make a 20x20 ground made of grass
+        for (int i = -10; i < 10; i++) {
+            for (int j = -10; j < 10; j++) {
+                world.addCube(new Cube(baseDir + "/src/main/resources/grass.png", shader, i, -3.0f, j));
+            }
+        }
+
         camera = new Camera(screenWidth, screenHeight);
         inputHandler = new InputHandler(window, camera);
 
@@ -66,6 +87,10 @@ public class Instance {
         textWindow = new TextWindow();
         SwingUtilities.invokeLater(() -> textWindow.setVisible(true));
 
+        // Initialize FPS variables
+        lastTime = System.currentTimeMillis();
+        frames = 0;
+        fps = 0.0f;
     }
 
     private void loop() {
@@ -77,10 +102,28 @@ public class Instance {
             camera.updateCamera();
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            cube.renderCube(camera);
+            // Render the world
+            for (Cube cube : world.getCubes()) {
+                cube.renderCube(camera);
+            }
 
-            String cameraInfo = String.format("Camera Position: (%.2f, %.2f, %.2f)", camera.getCameraX(), camera.getCameraY(), camera.getCameraZ());
-            SwingUtilities.invokeLater(() -> textWindow.updateText(cameraInfo));
+            // Add Camera Data
+            textWindow.add(String.format("Cam:\nX %.2f  Y %.2f  Z %.2f\nY %.2f  P %.2f", camera.getCameraX(), camera.getCameraY(), camera.getCameraZ(),  camera.getYawDeg(), camera.getPitchDeg()));
+            textWindow.blank();
+
+            // Calculate FPS
+            frames++;
+            long currentTime = System.currentTimeMillis();
+            if (currentTime - lastTime >= 1000) {
+                fps = frames * 1000.0f / (currentTime - lastTime);
+                lastTime = currentTime;
+                frames = 0;
+            }
+
+            // Add FPS Data
+            textWindow.add(String.format("FPS: %.2f", fps));
+
+            SwingUtilities.invokeLater(() -> textWindow.post());
 
             glfwSwapBuffers(window);
             glfwPollEvents();

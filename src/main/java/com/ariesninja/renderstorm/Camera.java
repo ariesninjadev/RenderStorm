@@ -4,9 +4,11 @@ import org.joml.Matrix4f;
 
 public class Camera {
     private float cameraX = 0.0f, cameraY = 0.0f, cameraZ = 5.0f;
+    private float targetCameraX = 0.0f, targetCameraY = 0.0f, targetCameraZ = 5.0f;
     private float pitch = 0.0f, yaw = 0.0f;
-    private float speed = 0.07f;          // Movement speed
-    private float rotationSpeed = 0.4f;   // Rotation speed
+    private float targetPitch = 0.0f, targetYaw = 0.0f;
+    private final float speed = 0.04f;          // Movement speed
+    private final float rotationSpeed = 0.32f;   // Rotation speed
 
     private int width, height;
 
@@ -16,51 +18,60 @@ public class Camera {
     }
 
     public void updateCamera() {
-        // Update camera logic if needed
+        // Interpolate position
+        // Smoothing factor
+        float smoothingFactor = 0.1f;
+        cameraX += (targetCameraX - cameraX) * smoothingFactor;
+        cameraY += (targetCameraY - cameraY) * smoothingFactor;
+        cameraZ += (targetCameraZ - cameraZ) * smoothingFactor;
+
+        // Interpolate rotation
+        pitch += (targetPitch - pitch) * smoothingFactor;
+        yaw += (targetYaw - yaw) * smoothingFactor;
     }
 
     public void moveForward() {
-        cameraX += speed * Math.sin(Math.toRadians(yaw));
-        cameraZ -= speed * Math.cos(Math.toRadians(yaw));
+        targetCameraX += speed * Math.sin(Math.toRadians(targetYaw));
+        targetCameraZ -= speed * Math.cos(Math.toRadians(targetYaw));
     }
 
     public void moveBackward() {
-        cameraX -= speed * Math.sin(Math.toRadians(yaw));
-        cameraZ += speed * Math.cos(Math.toRadians(yaw));
+        targetCameraX -= speed * Math.sin(Math.toRadians(targetYaw));
+        targetCameraZ += speed * Math.cos(Math.toRadians(targetYaw));
     }
 
     public void moveLeft() {
-        cameraX -= speed * Math.cos(Math.toRadians(yaw));
-        cameraZ -= speed * Math.sin(Math.toRadians(yaw));
+        targetCameraX -= speed * Math.cos(Math.toRadians(targetYaw));
+        targetCameraZ -= speed * Math.sin(Math.toRadians(targetYaw));
     }
 
     public void moveRight() {
-        cameraX += speed * Math.cos(Math.toRadians(yaw));
-        cameraZ += speed * Math.sin(Math.toRadians(yaw));
+        targetCameraX += speed * Math.cos(Math.toRadians(targetYaw));
+        targetCameraZ += speed * Math.sin(Math.toRadians(targetYaw));
     }
 
     public void moveUp() {
-        cameraY += speed; // Vertical up
+        targetCameraY += speed; // Vertical up
     }
 
     public void moveDown() {
-        cameraY -= speed; // Vertical down
+        targetCameraY -= speed; // Vertical down
     }
 
     public void rotateUp() {
-        pitch -= rotationSpeed;
+        targetPitch -= rotationSpeed;
     }
 
     public void rotateDown() {
-        pitch += rotationSpeed;
+        targetPitch += rotationSpeed;
     }
 
     public void rotateLeft() {
-        yaw -= rotationSpeed;
+        targetYaw -= rotationSpeed;
     }
 
     public void rotateRight() {
-        yaw += rotationSpeed;
+        targetYaw += rotationSpeed;
     }
 
     public float[] getViewMatrix() {
@@ -90,5 +101,13 @@ public class Camera {
 
     public float getCameraZ() {
         return cameraZ;
+    }
+
+    public float getPitchDeg() {
+        return -pitch;
+    }
+
+    public float getYawDeg() {
+        return yaw;
     }
 }

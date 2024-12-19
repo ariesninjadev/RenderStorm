@@ -4,7 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 
 public class TextWindow extends JFrame {
+
     private JTextArea textArea;
+    private String text;
 
     public TextWindow() {
         setTitle("Renderstorm Debug");
@@ -15,7 +17,17 @@ public class TextWindow extends JFrame {
         add(new JScrollPane(textArea), BorderLayout.CENTER);
     }
 
-    public void updateText(String text) {
-        textArea.setText(text);
+    public void add(String text) {
+        this.text += text + "\n";
     }
+
+    public void post() {
+        textArea.setText(this.text);
+        this.text = "";
+    }
+
+    public void blank() {
+        this.text += "\n";
+    }
+
 }
