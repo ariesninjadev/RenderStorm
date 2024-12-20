@@ -7,19 +7,21 @@ public class Camera {
     private float targetCameraX = 0.0f, targetCameraY = 0.0f, targetCameraZ = 5.0f;
     private float pitch = 0.0f, yaw = 0.0f;
     private float targetPitch = 0.0f, targetYaw = 0.0f;
-    private final float speed = 0.04f;          // Movement speed
-    private final float rotationSpeed = 0.32f;   // Rotation speed
+    private final float speed = 4.0f;          // Movement speed
+    private final float rotationSpeed = 36.0f;   // Rotation speed
+    private float fov = 60.0f; // Field of view
+    private float targetFov = 60.0f; // Target field of view
 
-    private int width, height;
+    private final int width;
+    private final int height;
 
     public Camera(int width, int height) {
         this.width = width;
         this.height = height;
     }
 
-    public void updateCamera() {
+    public void updateCamera(float deltaTime) {
         // Interpolate position
-        // Smoothing factor
         float smoothingFactor = 0.1f;
         cameraX += (targetCameraX - cameraX) * smoothingFactor;
         cameraY += (targetCameraY - cameraY) * smoothingFactor;
@@ -28,50 +30,61 @@ public class Camera {
         // Interpolate rotation
         pitch += (targetPitch - pitch) * smoothingFactor;
         yaw += (targetYaw - yaw) * smoothingFactor;
+
+        // Interpolate FOV
+        fov += (targetFov - fov) * smoothingFactor;
     }
 
-    public void moveForward() {
-        targetCameraX += speed * Math.sin(Math.toRadians(targetYaw));
-        targetCameraZ -= speed * Math.cos(Math.toRadians(targetYaw));
+    public void increaseFov() {
+        targetFov = 75.0f; // Increase FOV
     }
 
-    public void moveBackward() {
-        targetCameraX -= speed * Math.sin(Math.toRadians(targetYaw));
-        targetCameraZ += speed * Math.cos(Math.toRadians(targetYaw));
+    public void resetFov() {
+        targetFov = 60.0f; // Reset FOV
     }
 
-    public void moveLeft() {
-        targetCameraX -= speed * Math.cos(Math.toRadians(targetYaw));
-        targetCameraZ -= speed * Math.sin(Math.toRadians(targetYaw));
+    public void moveForward(float deltaTime) {
+        targetCameraX += speed * deltaTime * Math.sin(Math.toRadians(targetYaw));
+        targetCameraZ -= speed * deltaTime * Math.cos(Math.toRadians(targetYaw));
     }
 
-    public void moveRight() {
-        targetCameraX += speed * Math.cos(Math.toRadians(targetYaw));
-        targetCameraZ += speed * Math.sin(Math.toRadians(targetYaw));
+    public void moveBackward(float deltaTime) {
+        targetCameraX -= speed * deltaTime * Math.sin(Math.toRadians(targetYaw));
+        targetCameraZ += speed * deltaTime * Math.cos(Math.toRadians(targetYaw));
     }
 
-    public void moveUp() {
-        targetCameraY += speed; // Vertical up
+    public void moveLeft(float deltaTime) {
+        targetCameraX -= speed * deltaTime * Math.cos(Math.toRadians(targetYaw));
+        targetCameraZ -= speed * deltaTime * Math.sin(Math.toRadians(targetYaw));
     }
 
-    public void moveDown() {
-        targetCameraY -= speed; // Vertical down
+    public void moveRight(float deltaTime) {
+        targetCameraX += speed * deltaTime * Math.cos(Math.toRadians(targetYaw));
+        targetCameraZ += speed * deltaTime * Math.sin(Math.toRadians(targetYaw));
     }
 
-    public void rotateUp() {
-        targetPitch -= rotationSpeed;
+    public void moveUp(float deltaTime) {
+        targetCameraY += speed * deltaTime; // Vertical up
     }
 
-    public void rotateDown() {
-        targetPitch += rotationSpeed;
+    public void moveDown(float deltaTime) {
+        targetCameraY -= speed * deltaTime; // Vertical down
     }
 
-    public void rotateLeft() {
-        targetYaw -= rotationSpeed;
+    public void rotateUp(float deltaTime) {
+        targetPitch -= rotationSpeed * deltaTime;
     }
 
-    public void rotateRight() {
-        targetYaw += rotationSpeed;
+    public void rotateDown(float deltaTime) {
+        targetPitch += rotationSpeed * deltaTime;
+    }
+
+    public void rotateLeft(float deltaTime) {
+        targetYaw -= rotationSpeed * deltaTime;
+    }
+
+    public void rotateRight(float deltaTime) {
+        targetYaw += rotationSpeed * deltaTime;
     }
 
     public float[] getViewMatrix() {
@@ -85,7 +98,7 @@ public class Camera {
     }
 
     public float[] getProjectionMatrix() {
-        Matrix4f projectionMatrix = new Matrix4f().perspective((float) Math.toRadians(45.0f), (float) width / (float) height, 0.1f, 100.0f);
+        Matrix4f projectionMatrix = new Matrix4f().perspective((float) Math.toRadians(fov), (float) width / (float) height, 0.1f, 100.0f);
         float[] projectionArray = new float[16];
         projectionMatrix.get(projectionArray);
         return projectionArray;
