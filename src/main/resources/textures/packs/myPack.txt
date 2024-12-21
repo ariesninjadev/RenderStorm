@@ -1,0 +1,2 @@
+0=/src/main/resources/textures/images/4krender.png
+1=/src/main/resources/textures/images/grass.png

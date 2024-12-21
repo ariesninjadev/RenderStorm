@@ -3,6 +3,7 @@ package com.ariesninja.renderstorm;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
+import org.w3c.dom.Text;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -20,6 +21,7 @@ public class Instance {
     private Cube cube;
     private Camera camera;
     private InputHandler inputHandler;
+    private TextureLoader textureLoader;
     private Shader shader;
     private TextWindow textWindow;
 
@@ -61,6 +63,9 @@ public class Instance {
         // Get the base directory
         String baseDir = System.getProperty("user.dir");
 
+        // Initialize the texture loader
+        textureLoader = new TextureLoader(baseDir, "/src/main/resources/textures/packs/myPack.txt");
+
         // Initialize components with relative paths
         shader = new Shader(
                 baseDir + "/src/main/resources/data/vertex_shader.glsl",
@@ -70,17 +75,19 @@ public class Instance {
         // Initialize the world
         world = new World();
 
-        cube = new Cube(baseDir + "/src/main/resources/4krender.png", shader, 0.0f, 0.0f, 0.0f);
+        cube = new Cube(0, shader, 0.0f, 0.0f, 0.0f);
         world.addCube(cube);
 
         // Make a 20x20 ground made of grass
         for (int i = -10; i < 10; i++) {
             for (int j = -10; j < 10; j++) {
-                world.addCube(new Cube(baseDir + "/src/main/resources/grass.png", shader, i, -3.0f, j));
+                world.addCube(new Cube(1, shader, i, -3.0f, j));
             }
         }
 
         camera = new Camera(screenWidth, screenHeight);
+        camera.init(0.5f, 0.5f, 5f, 0.0f, 0.0f);
+
         inputHandler = new InputHandler(window, camera);
 
         // Initialize TextWindow

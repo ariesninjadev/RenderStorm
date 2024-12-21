@@ -5,6 +5,7 @@ import org.joml.Matrix4f;
 import static org.lwjgl.opengl.GL45.*;
 
 public class Cube {
+
     private int vao, vbo, ebo, textureID;
     private Shader shader;
     private float[] vertices = {
@@ -46,12 +47,12 @@ public class Cube {
 
     private float coordX, coordY, coordZ;
 
-    public Cube(String texturePath, Shader shader, float coordX, float coordY, float coordZ) {
+    public Cube(int texture, Shader shader, float coordX, float coordY, float coordZ) {
         this.shader = shader;
         this.coordX = coordX;
         this.coordY = coordY;
         this.coordZ = coordZ;
-        textureID = TextureLoader.loadTexture(texturePath);
+        textureID = TextureLoader.getGlobal().loadTexture(texture);
         initCube();
     }
 

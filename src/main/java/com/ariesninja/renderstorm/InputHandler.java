@@ -45,7 +45,10 @@ public class InputHandler {
         if (GLFW.glfwGetKey(window, GLFW.GLFW_KEY_RIGHT) == GLFW.GLFW_PRESS) {
             camera.rotateRight();
         }
+
+        // Reset to default position
+        if (GLFW.glfwGetKey(window, GLFW.GLFW_KEY_R) == GLFW.GLFW_PRESS) {
+            camera.resetPositionSmooth();
+        }
     }
 }
-
-
