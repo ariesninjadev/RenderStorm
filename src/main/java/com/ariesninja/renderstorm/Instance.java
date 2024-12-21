@@ -28,6 +28,9 @@ public class Instance {
     private int screenWidth = 2560/2;
     private int screenHeight = 1440/2;
 
+    private float deltaTime;
+    private long lastFrameTime;
+
     private long lastTime;
     private int frames;
     private float fps;
@@ -104,9 +107,15 @@ public class Instance {
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glEnable(GL_DEPTH_TEST);
 
+        lastFrameTime = System.currentTimeMillis();
+
         while (!glfwWindowShouldClose(window)) {
-            inputHandler.handleInput();
-            camera.updateCamera();
+            long currentFrameTime = System.currentTimeMillis();
+            deltaTime = (currentFrameTime - lastFrameTime) / 1000.0f;
+            lastFrameTime = currentFrameTime;
+
+            inputHandler.handleInput(deltaTime);
+            camera.updateCamera(deltaTime);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             // Render the world
@@ -120,10 +129,9 @@ public class Instance {
 
             // Calculate FPS
             frames++;
-            long currentTime = System.currentTimeMillis();
-            if (currentTime - lastTime >= 1000) {
-                fps = frames * 1000.0f / (currentTime - lastTime);
-                lastTime = currentTime;
+            if (currentFrameTime - lastTime >= 1000) {
+                fps = frames * 1000.0f / (currentFrameTime - lastTime);
+                lastTime = currentFrameTime;
                 frames = 0;
             }
 
