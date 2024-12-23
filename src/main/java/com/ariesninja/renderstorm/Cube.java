@@ -1,13 +1,10 @@
 package com.ariesninja.renderstorm;
 
-import org.joml.Matrix4f;
-
 import static org.lwjgl.opengl.GL45.*;
 
 public class Cube {
 
     private int vao, vbo, ebo, textureID;
-    private Shader shader;
     private float[] vertices = {
             // Positions          // Texture Coords
             -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // Back face
@@ -47,8 +44,7 @@ public class Cube {
 
     private float coordX, coordY, coordZ;
 
-    public Cube(int texture, Shader shader, float coordX, float coordY, float coordZ) {
-        this.shader = shader;
+    public Cube(int texture, float coordX, float coordY, float coordZ) {
         this.coordX = coordX;
         this.coordY = coordY;
         this.coordZ = coordZ;
@@ -78,19 +74,31 @@ public class Cube {
         glBindVertexArray(0);
     }
 
-    public void renderCube(Camera camera) {
-        shader.use();
-        shader.setMat4("view", camera.getViewMatrix());
-        shader.setMat4("projection", camera.getProjectionMatrix());
+    public int getVao() {
+        return vao;
+    }
 
-        Matrix4f model = new Matrix4f().identity().translate(coordX + 0.5f, coordY + 0.5f, coordZ + 0.5f);
-        float[] modelArray = new float[16];
-        model.get(modelArray);
-        shader.setMat4("model", modelArray);
+    public int getTextureID() {
+        return textureID;
+    }
 
-        glBindTexture(GL_TEXTURE_2D, textureID);
-        glBindVertexArray(vao);
-        glDrawElements(GL_TRIANGLES, indices.length, GL_UNSIGNED_INT, 0);
-        glBindVertexArray(0);
+    public float getCoordX() {
+        return coordX;
+    }
+
+    public float getCoordY() {
+        return coordY;
+    }
+
+    public float getCoordZ() {
+        return coordZ;
+    }
+
+    public int[] getIndices() {
+        return indices;
+    }
+
+    public int getVertexCount() {
+        return indices.length;
     }
 }
