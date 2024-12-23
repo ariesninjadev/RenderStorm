@@ -67,7 +67,7 @@ public class Instance {
         String baseDir = System.getProperty("user.dir");
 
         // Initialize the texture loader
-        textureLoader = new TextureLoader(baseDir, "/src/main/resources/textures/packs/myPack.txt");
+        textureLoader = new TextureLoader(baseDir, "/src/main/resources/textures/packs/res.txt");
 
         // Initialize components with relative paths
         shader = new Shader(
@@ -78,15 +78,21 @@ public class Instance {
         // Initialize the world
         world = new World();
 
-        cube = new Cube(0, shader, 0.0f, 0.0f, 0.0f);
-        world.addCube(cube);
+//        cube = new Cube(0, shader, 0.0f, 0.0f, 0.0f);
+//        world.addCube(cube);
 
         // Make a 20x20 ground made of grass
         for (int i = -10; i < 10; i++) {
             for (int j = -10; j < 10; j++) {
-                world.addCube(new Cube(1, shader, i, -3.0f, j));
+                world.addCube(new Cube(0, shader, i, -3.0f, j));
             }
         }
+
+        for (int i = 0; i < 9; i++) {
+            world.addCube(new Cube((int) Math.pow(2, i+4), shader, i-5, 0.0f, 0.0f));
+        }
+
+        world.addCube(new Cube(1, shader, -5f, 1.0f, 0.0f));
 
         camera = new Camera(screenWidth, screenHeight);
         camera.init(0.5f, 0.5f, 5f, 0.0f, 0.0f);
@@ -115,7 +121,7 @@ public class Instance {
             lastFrameTime = currentFrameTime;
 
             inputHandler.handleInput(deltaTime);
-            camera.updateCamera(deltaTime);
+            camera.updateCamera();
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             // Render the world

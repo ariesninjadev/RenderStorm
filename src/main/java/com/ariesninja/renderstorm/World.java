@@ -1,7 +1,5 @@
 package com.ariesninja.renderstorm;
 
-// TEMPORARY! REMOVE THIS LATER
-
 import java.util.ArrayList;
 
 public class World {
@@ -19,5 +17,4 @@ public class World {
     public ArrayList<Cube> getCubes() {
         return cubes;
     }
-
 }

@@ -49,18 +49,17 @@ public class TextureLoader {
     }
 
     public int loadTexture(int texture) {
-
         // Load texture from pack data
         String filePath = baseDir + textureMap.get(texture);
 
         int textureID = glGenTextures();
         glBindTexture(GL_TEXTURE_2D, textureID);
 
-        // Set texture parameters
+        // Set texture parameters for nearest-neighbor filtering
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
         // Load image
         try (MemoryStack stack = stackPush()) {
@@ -69,6 +68,7 @@ public class TextureLoader {
             IntBuffer channels = stack.mallocInt(1);
 
             STBImage.stbi_set_flip_vertically_on_load(true); // Flip image vertically
+            System.out.println("Loading texture: " + filePath);
             ByteBuffer image = STBImage.stbi_load(filePath, width, height, channels, 4);
             if (image == null) {
                 throw new RuntimeException("Failed to load texture: " + STBImage.stbi_failure_reason());

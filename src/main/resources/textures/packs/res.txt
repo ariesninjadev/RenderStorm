@@ -1,0 +1,11 @@
+0=/src/main/resources/textures/images/grass.png
+1=/src/main/resources/textures/images/dirt.png
+16=/src/main/resources/textures/images/res/16.png
+32=/src/main/resources/textures/images/res/32.png
+64=/src/main/resources/textures/images/res/64.png
+128=/src/main/resources/textures/images/res/128.png
+256=/src/main/resources/textures/images/res/256.png
+512=/src/main/resources/textures/images/res/512.png
+1024=/src/main/resources/textures/images/res/1024.png
+2048=/src/main/resources/textures/images/res/2048.png
+4096=/src/main/resources/textures/images/res/4000.png

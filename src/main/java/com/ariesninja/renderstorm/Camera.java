@@ -15,7 +15,7 @@ public class Camera {
     private float targetCameraX = 0.0f, targetCameraY = 0.0f, targetCameraZ = 5.0f;
     private float targetPitch = 0.0f, targetYaw = 0.0f;
     private final float speed = 4.0f;          // Movement speed
-    private final float rotationSpeed = 36.0f;   // Rotation speed
+    private final float rotationSpeed = 54.0f;   // Rotation speed
     private float fov = 60.0f; // Field of view
     private float targetFov = 60.0f; // Target field of view
 
@@ -37,7 +37,7 @@ public class Camera {
         resetPositionInstant();
     }
 
-    public void updateCamera(float deltaTime) {
+    public void updateCamera() {
         checkInitialized();
         // Interpolate position
         float smoothingFactor = 0.1f;
@@ -77,15 +77,13 @@ public class Camera {
         // Clamp yaw to be between -180 and 180 degrees
         if (yaw < -180.0f) {
             yaw += 360.0f;
+            targetYaw += 360.0f;
         } else if (yaw > 180.0f) {
             yaw -= 360.0f;
-        }
-
-        if (targetYaw < -180.0f) {
-            targetYaw += 360.0f;
-        } else if (targetYaw > 180.0f) {
             targetYaw -= 360.0f;
         }
+
+
     }
 
     public void increaseFov() {
@@ -98,26 +96,26 @@ public class Camera {
 
     public void moveForward(float deltaTime) {
         checkInitialized();
-        targetCameraX += speed * deltaTime * Math.sin(Math.toRadians(targetYaw));
-        targetCameraZ -= speed * deltaTime * Math.cos(Math.toRadians(targetYaw));
+        targetCameraX += (float) (speed * deltaTime * Math.sin(Math.toRadians(targetYaw)));
+        targetCameraZ -= (float) (speed * deltaTime * Math.cos(Math.toRadians(targetYaw)));
     }
 
     public void moveBackward(float deltaTime) {
         checkInitialized();
-        targetCameraX -= speed * deltaTime * Math.sin(Math.toRadians(targetYaw));
-        targetCameraZ += speed * deltaTime * Math.cos(Math.toRadians(targetYaw));
+        targetCameraX -= (float) (speed * deltaTime * Math.sin(Math.toRadians(targetYaw)));
+        targetCameraZ += (float) (speed * deltaTime * Math.cos(Math.toRadians(targetYaw)));
     }
 
     public void moveLeft(float deltaTime) {
         checkInitialized();
-        targetCameraX -= speed * deltaTime * Math.cos(Math.toRadians(targetYaw));
-        targetCameraZ -= speed * deltaTime * Math.sin(Math.toRadians(targetYaw));
+        targetCameraX -= (float) (speed * deltaTime * Math.cos(Math.toRadians(targetYaw)));
+        targetCameraZ -= (float) (speed * deltaTime * Math.sin(Math.toRadians(targetYaw)));
     }
 
     public void moveRight(float deltaTime) {
         checkInitialized();
-        targetCameraX += speed * deltaTime * Math.cos(Math.toRadians(targetYaw));
-        targetCameraZ += speed * deltaTime * Math.sin(Math.toRadians(targetYaw));
+        targetCameraX += (float) (speed * deltaTime * Math.cos(Math.toRadians(targetYaw)));
+        targetCameraZ += (float) (speed * deltaTime * Math.sin(Math.toRadians(targetYaw)));
     }
 
     public void moveUp(float deltaTime) {
