@@ -1,7 +1,7 @@
 
 <div align="center">
   <a href="https://github.com/ariesninjadev/RenderStorm">
-    <img src="https://bin.aries.ninja/rs.png" alt="Logo" width="200">
+    <img src="rs.png" alt="Logo" width="200">
   </a>
 
 <h3 align="center">RenderStorm</h3>
